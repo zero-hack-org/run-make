@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "run-make"
+version = "1.0.0"
+description = ""
+authors = ["yuya-morimoto <my.hack.0312@gmail.com>"]
+readme = "README.md"
+packages = [{include = "run_make"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "4.2.10"
+taskipy = "^1.12.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.taskipy.tasks]
+generate_env = "python generate_env.py"
+start_local = "python manage.py runserver 0:8000"
+format = "isort . && black ."
+lint = "pflake8 && mypy ."
+check = "task format && task lint"
+test = "pytest"
+test_cov_html = "pytest --cov-report=html"
+test_cov_xml = "pytest --cov-report=xml"

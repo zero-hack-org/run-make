@@ -1,0 +1,34 @@
+version: "3"
+
+services:
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+      target: runner
+    image: run-make-web
+    container_name: run-make-web
+    tty: true
+    volumes:
+      - ./web:/app
+    working_dir: /app
+    ports:
+      - "8000:8000"
+    profiles:
+      - local
+  db:
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+      args:
+        POSTGRESQL_IMAGE_TAG: "16.0-alpine3.18"
+    image: dj-todo-db
+    container_name: dj-todo-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db/data:/var/lib/postgresql/data/
+    env_file:
+      - ./db/.env
+    profiles:
+      - local
