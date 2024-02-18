@@ -10,13 +10,50 @@ packages = [{include = "run_make"}]
 python = "^3.11"
 django = "4.2.10"
 taskipy = "^1.12.2"
+django-environ = "^0.11.2"
+psycopg = "^3.1.18"
+django-debug-toolbar = "^4.3.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.2.0"
+pyproject-flake8 = "^6.1.0"
+isort = "^5.13.2"
+mypy = "^1.8.0"
+django-stubs = "^4.2.7"
+pytest-django = "^4.8.0"
+pytest-cov = "^4.1.0"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.black]
+line-length = 100
+
+[tool.flake8]
+max-line-length = 100
+exclude = "migrations,__pycache__,manage.py,settings.py,env,.env,.venv"
+
+[tool.mypy]
+plugins = ["mypy_django_plugin.main"]
+show_error_codes = true
+show_error_context = true
+show_column_numbers = true
+disallow_untyped_defs = true
+no_implicit_optional = true
+warn_return_any = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+
+[tool.django-stubs]
+django_settings_module = "config.settings.local"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings.test"
+python_files = ["tests/test_*.py"]
+
 [tool.taskipy.tasks]
-generate_env = "python generate_env.py"
+genenv = "python script/genenv.py"
 start_local = "python manage.py runserver 0:8000"
 format = "isort . && black ."
 lint = "pflake8 && mypy ."

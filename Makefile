@@ -8,3 +8,5 @@ start_local:
 	docker exec -it dj-todo-web /bin/bash -c "poetry run task start_local"
 attach_web:
 	docker exec -it run-make-web /bin/bash
+attach_db:
+	docker exec -it run-make-db /bin/bash
