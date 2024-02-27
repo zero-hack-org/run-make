@@ -22,8 +22,16 @@ api for runnning support application
 ### Command
 
 - database connections  
-    `psql -U admin -d db`
+   `psql -U admin -d db`
 
+### Site
+
+#### [local]
+
+root: <http://0.0.0.0:8000>  
+admin: <http://0.0.0.0:8000/admin>  
+swagger-ui: <http://0.0.0.0:8000/api/docs>  
+redoc: <http://0.0.0.0:8000/api/redoc>
 
 ### Useful links
 
