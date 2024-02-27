@@ -10,6 +10,9 @@ from . import managers
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    # Default
+    DEFAUKT_USERNAME = "Unknown"
+
     # Gender choices
     MAN = "M"
     WOMAN = "W"
@@ -19,7 +22,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(_("id"), primary_key=True, default=uuid.uuid4)
     email = models.EmailField(_("email"), unique=True, max_length=100)
     username = models.CharField(
-        _("username"), max_length=30, null=False, blank=False, default="Unknown"
+        _("username"), max_length=30, null=False, blank=False, default=DEFAUKT_USERNAME
     )
     gender = models.CharField(
         _("gender"), max_length=1, choices=GENDER_CHOICES, null=True, blank=False, default=None
