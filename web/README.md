@@ -21,7 +21,7 @@ api for runnning support application
 
 ### Command
 
-- database connections  
+- local database connections  
    `psql -U admin -d db`
 
 ### Site
