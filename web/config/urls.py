@@ -19,15 +19,40 @@ from django.conf import settings
 from django.conf.urls import include
 from django.contrib import admin
 from django.urls import path
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularRedocView,
+    SpectacularSwaggerView,
+)
 
 from . import views
 
 urlpatterns = [
-    path("", view=views.IndexView.as_view()),
-    path("admin/", admin.site.urls),
+    # Root view
+    path("", view=views.IndexView.as_view(), name="root"),
+    
+    # Admin site
+    path("admin/", admin.site.urls, name="admin"),
+    
+    # SwaggerUI
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    path(
+        "api/docs/",
+        SpectacularSwaggerView.as_view(url_name="schema"),
+        name="swagger-ui",
+    ),
+    path(
+        "api/redoc/",
+        SpectacularRedocView.as_view(url_name="schema"),
+        name="redoc",
+    ),
+    
+    # Authentication and Authorization
+    path("authenticator/", include("authenticator.urls"), name="authenticator"),
 ]
 
-# debug settings
+# Setting Debug mode
 if settings.DEBUG:
     import debug_toolbar  # type: ignore # noqa
 
