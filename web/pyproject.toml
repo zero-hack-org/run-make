@@ -49,6 +49,7 @@ warn_return_any = true
 warn_unused_ignores = true
 warn_redundant_casts = true
 exclude = ["migrations"]
+mypy_path = "./out"
 
 [tool.django-stubs]
 django_settings_module = "config.settings.local"
@@ -59,6 +60,7 @@ python_files = ["tests/test_*.py"]
 
 [tool.taskipy.tasks]
 genenv = "python script/genenv.py"
+stubgen = "stubgen ./**/**.py"
 start_local = "python manage.py runserver 0:8000"
 format = "isort . && black ."
 lint = "pflake8 && mypy ."

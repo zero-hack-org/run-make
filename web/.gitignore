@@ -177,3 +177,6 @@ cython_debug/
 # keep
 !.keep
 !.gitkeep
+
+# generated stub
+out/
