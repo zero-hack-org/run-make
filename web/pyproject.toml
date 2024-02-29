@@ -36,7 +36,7 @@ line-length = 100
 
 [tool.flake8]
 max-line-length = 100
-exclude = "migrations,__pycache__,manage.py,settings.py,env,.env,.venv"
+exclude = "migrations,__pycache__,manage.py,settings.py,env,.env,.venv,out"
 
 [tool.mypy]
 plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main"]
@@ -48,7 +48,7 @@ no_implicit_optional = true
 warn_return_any = true
 warn_unused_ignores = true
 warn_redundant_casts = true
-exclude = ["migrations"]
+exclude = ["migrations", "out"]
 mypy_path = "./out"
 
 [tool.django-stubs]
@@ -61,6 +61,7 @@ python_files = ["tests/test_*.py"]
 [tool.taskipy.tasks]
 genenv = "python script/genenv.py"
 stubgen = "stubgen ./**/**.py"
+setup = "task genenv && task stubgen"
 start_local = "python manage.py runserver 0:8000"
 format = "isort . && black ."
 lint = "pflake8 && mypy ."
