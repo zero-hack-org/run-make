@@ -14,6 +14,8 @@ services:
     working_dir: /app
     environment:
       - READ_DJANGO_ENV_FILE=true
+    env_file:
+      - ./web/.env
     ports:
       - "8000:8000"
     profiles:
