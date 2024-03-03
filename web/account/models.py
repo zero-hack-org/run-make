@@ -1,7 +1,9 @@
 import uuid
 
+from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.core import validators
+from django.core.mail import send_mail
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -25,7 +27,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         _("username"), max_length=30, null=False, blank=False, default=DEFAULT_USERNAME
     )
     gender = models.CharField(
-        _("gender"), max_length=1, choices=GENDER_CHOICES, null=True, blank=False, default=None
+        _("gender"), max_length=1, choices=GENDER_CHOICES, null=True, blank=True, default=None
     )
     birthday = models.DateField(_("birthday"), null=True, blank=True, default=None)
     body_weight = models.DecimalField(
@@ -48,6 +50,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     is_staff = models.BooleanField(_("is staff"), default=False)
     is_active = models.BooleanField(_("is active"), default=False)
+    is_email_verified = models.BooleanField(_("is email verified"), default=False)
     is_superuser = models.BooleanField(_("is superuser"), default=False)
     created_at = models.DateTimeField(_("created at"), default=timezone.now)
 
@@ -56,3 +59,18 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELD = ""
 
     objects = managers.UserManager()  # type: ignore
+
+    def send_mail(
+        self,
+        subject: str,
+        message: str,
+        from_email: str | None = None,
+        html_message: str | None = None,
+    ) -> None:
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=settings.DEFAULT_FROM_EMAIL if from_email is None else from_email,
+            recipient_list=[self.email],
+            html_message=html_message,
+        )

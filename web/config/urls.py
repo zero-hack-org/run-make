@@ -42,6 +42,8 @@ urlpatterns = [
     ),
     # Authentication and Authorization
     path("authenticator/", include("authenticator.urls"), name="authenticator"),
+    # Account
+    path("account/", include("account.urls"), name="account"),
 ]
 
 # Setting Debug mode

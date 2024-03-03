@@ -30,8 +30,15 @@ def generate_env() -> None:
             "DB_HOST=run-make-db\n",
             "DB_PORT=5432\n",
             "\n",
-            "# Redis\n",
-            "REDIS_LOCATION=redis://redis:6379",
+            "# Email\n",
+            "EMAIL_HOST=\n",
+            "EMAIL_HOST_USER=\n",
+            "EMAIL_HOST_PASSWORD=\n",
+            "EMAIL_PORT=\n",
+            "DEFAULT_FROM_EMAIL=\n",
+            "\n",
+            "# Unique\n",
+            "SUPPORT_EMAIL_ADDRESS=support@example.com\n",
         ]
         with open(".env", mode="w", newline="\n") as f:
             f.writelines(writelines)

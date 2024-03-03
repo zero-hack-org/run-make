@@ -33,6 +33,7 @@ class UserAdmin(BaseUserAdmin):
                     "is_staff",
                     "is_active",
                     "is_superuser",
+                    "is_email_verified",
                     "groups",
                     "user_permissions",
                 )
@@ -63,6 +64,7 @@ class UserAdmin(BaseUserAdmin):
     list_filter = (
         "is_staff",
         "is_active",
+        "is_email_verified",
     )
     search_fields = ("id", "email")
     ordering = ("-created_at",)

@@ -60,7 +60,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt.token_blacklist",
     "drf_spectacular",
     "account",
-    "authenticator"
+    "authenticator",
 ]
 
 MIDDLEWARE = [
@@ -141,7 +141,7 @@ REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
-# Simple JWT Config
+# Simple JWT config
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=10),
@@ -158,7 +158,7 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
 
-# Swagger OpenAPI Config
+# Swagger OpenAPI config
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "Your Project API",
@@ -167,6 +167,16 @@ SPECTACULAR_SETTINGS = {
     "SERVE_INCLUDE_SCHEMA": False,
     # OTHER SETTINGS
 }
+
+# Django email sender config
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = env("EMAIL_HOST")
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+EMAIL_PORT = env("EMAIL_PORT")
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
 
 
 # Internationalization
@@ -191,4 +201,13 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# Custom user model
 AUTH_USER_MODEL = "account.User"
+
+
+# Unique config
+APPLICATION_NAME = "RunMake(仮)"
+SUPPORT_EMAIL_ADDRESS = env("SUPPORT_EMAIL_ADDRESS")
+
+# Custom endpoint
+EMAIL_VERIFY_END_POINT = "http://0.0.0.0:8000/account/verify/email"  # /uuid/token

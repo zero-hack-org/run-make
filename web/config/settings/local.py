@@ -11,3 +11,5 @@ MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
 # ips for docker network
 *_, ips = socket.gethostbyname_ex(socket.gethostname())
 INTERNAL_IPS += [ip[:-1] + "1" for ip in ips]
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
