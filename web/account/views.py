@@ -1,5 +1,6 @@
 from django.db import transaction
 from django.views.generic.base import TemplateView
+from rest_framework import status
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.request import Request
@@ -9,7 +10,7 @@ from . import serializers, services
 
 
 class SignUpView(CreateAPIView):
-    "Create user account and send verify email."
+    "Create user account and send verify email"
     permission_classes = [AllowAny]
     serializer_class = serializers.SignUpSerializer
 
@@ -28,8 +29,8 @@ class SignUpView(CreateAPIView):
         # Send verify email
         email_service = services.EmailService()
         email_service.send_activation(target_user=user, verify_token=verify_token)
-        raise ValueError("test")
-        return Response(serializer.data)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class VerifyEmailView(TemplateView):

@@ -1,4 +1,6 @@
+import re
 import uuid
+from typing import ClassVar
 
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
@@ -13,13 +15,19 @@ from . import managers
 
 class User(AbstractBaseUser, PermissionsMixin):
     # Default
-    DEFAULT_USERNAME = "Unknown"
+    DEFAULT_USERNAME: ClassVar = "Unknown"
 
     # Gender choices
-    MAN = "M"
-    WOMAN = "W"
-    OTHER = "O"
-    GENDER_CHOICES = [(MAN, "Man"), (WOMAN, "Woman"), (OTHER, "Other")]
+    MAN: ClassVar = "M"
+    WOMAN: ClassVar = "W"
+    OTHER: ClassVar = "O"
+    GENDER_CHOICES: ClassVar = [(MAN, "Man"), (WOMAN, "Woman"), (OTHER, "Other")]
+
+    # eng=min(1)
+    # num=min(1)
+    # available=mark
+    # length=min(8)max(14)
+    USER_PASSWORD_REGEX: ClassVar = r"^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z0-9!@#$%^&*()-_+=]{8,14}$"
 
     id = models.UUIDField(_("id"), primary_key=True, default=uuid.uuid4)
     email = models.EmailField(_("email"), unique=True, max_length=100)
@@ -74,3 +82,12 @@ class User(AbstractBaseUser, PermissionsMixin):
             recipient_list=[self.email],
             html_message=html_message,
         )
+
+    @staticmethod
+    def check_password(password: str) -> bool:
+        """Check password
+
+        True:Success
+        False:Failed
+        """
+        return False if re.fullmatch(User.USER_PASSWORD_REGEX, password) is None else True
