@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from django.db import transaction
 from django.views.generic.base import TemplateView
 from rest_framework import status
@@ -6,7 +8,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from . import serializers, services
+from . import models, serializers, services
 
 
 class SignUpView(CreateAPIView):
@@ -23,8 +25,8 @@ class SignUpView(CreateAPIView):
         user = serializer.save()
 
         # Token
-        generator = services.VerifyTokenService()
-        verify_token = generator.make_token(user)
+        token_service = services.VerifyTokenService()
+        verify_token = token_service.make_token(user)
 
         # Send verify email
         email_service = services.EmailService()
@@ -34,4 +36,31 @@ class SignUpView(CreateAPIView):
 
 
 class VerifyEmailView(TemplateView):
-    template_name = "verify_email.html"
+    template_name = "account/verify_email_success.html"
+
+    _user_id = "user_id"
+    _token = "token"
+
+    _expired_error_template_name = "account/verify_expired_token_error.html"
+    _other_error_template_name = "account/verify_other_error.html"
+
+    def get_template_names(self) -> list[str]:
+        user_id: UUID = self.kwargs.get(self._user_id)
+        verify_token: str = self.kwargs.get(self._token)
+
+        user = models.User.objects.get(pk=user_id)
+
+        token_service = services.VerifyTokenService()
+        result = token_service.custom_check_token(user=user, token=verify_token, limit=11)
+
+        # Success Case
+        if result.is_success is True:
+            return [self.template_name]
+
+        # Failed Case
+        if result.error_code == services.VerifyTokenCheckResult.EXPIRED_ERROR_CODE:
+            # Expired
+            return [self._expired_error_template_name]
+        else:
+            # Other
+            return [self._other_error_template_name]

@@ -44,7 +44,7 @@ class EmailService:
 
     def send_activation(self, target_user: models.User, verify_token: str) -> None:
         subject = f"仮登録完了のお知らせ[{settings.APPLICATION_NAME}]"
-        message_template_name = "account/emails/activation_by_email.txt"
+        message_template_name = "email/activation_by_email.txt"
         context = {
             "verify_url": f"{settings.EMAIL_VERIFY_END_POINT}/{target_user.id}/{verify_token}"
         }
@@ -63,7 +63,7 @@ class VerifyTokenService(PasswordResetTokenGenerator):
     """
 
     def custom_check_token(
-        self, user: AbstractBaseUser | None, token: str | None, limit: int = 60 * 60 * 24 * 3
+        self, user: AbstractBaseUser | None, token: str | None, limit: int = 60 * 60 * 24
     ) -> VerifyTokenCheckResult:
         if not (user and token):
             return VerifyTokenCheckResult.get_other_error()
