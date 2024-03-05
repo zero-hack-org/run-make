@@ -1,3 +1,6 @@
+from dataclasses import dataclass
+from typing import ClassVar
+
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
@@ -6,6 +9,31 @@ from django.utils.crypto import constant_time_compare
 from django.utils.http import base36_to_int
 
 from . import models
+
+
+@dataclass
+class VerifyTokenCheckResult:
+    EXPIRED_ERROR_CODE: ClassVar = 1
+    OTHER_ERROR_CODE: ClassVar = 9
+
+    is_success: bool
+
+    # error_code=None: Success
+    # error_code=1: Expired
+    # error_code=9: Other
+    error_code: int | None
+
+    @staticmethod
+    def get_success() -> "VerifyTokenCheckResult":
+        return VerifyTokenCheckResult(True, None)
+
+    @staticmethod
+    def get_expired_error() -> "VerifyTokenCheckResult":
+        return VerifyTokenCheckResult(False, VerifyTokenCheckResult.EXPIRED_ERROR_CODE)
+
+    @staticmethod
+    def get_other_error() -> "VerifyTokenCheckResult":
+        return VerifyTokenCheckResult(False, VerifyTokenCheckResult.OTHER_ERROR_CODE)
 
 
 class EmailService:
@@ -31,24 +59,24 @@ class EmailService:
 class VerifyTokenService(PasswordResetTokenGenerator):
     """
     Verify token generator
-    override check_token() available limit second.
+    override check_token() available limit second and type
     """
 
-    def check_token(
+    def custom_check_token(
         self, user: AbstractBaseUser | None, token: str | None, limit: int = 60 * 60 * 24 * 3
-    ) -> bool:
+    ) -> VerifyTokenCheckResult:
         if not (user and token):
-            return False
+            return VerifyTokenCheckResult.get_other_error()
         # Parse the token
         try:
             ts_b36, _ = token.split("-")
         except ValueError:
-            return False
+            return VerifyTokenCheckResult.get_other_error()
 
         try:
             ts = base36_to_int(ts_b36)
         except ValueError:
-            return False
+            return VerifyTokenCheckResult.get_other_error()
 
         for secret in [self.secret, *self.secret_fallbacks]:
             if constant_time_compare(
@@ -57,10 +85,10 @@ class VerifyTokenService(PasswordResetTokenGenerator):
             ):
                 break
         else:
-            return False
+            return VerifyTokenCheckResult.get_other_error()
 
         # Check the timestamp is within limit.
         if (self._num_seconds(self._now()) - ts) > limit:
-            return False
+            return VerifyTokenCheckResult.get_expired_error()
 
-        return True
+        return VerifyTokenCheckResult.get_success()
