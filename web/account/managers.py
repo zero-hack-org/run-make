@@ -10,6 +10,12 @@ _T = TypeVar("_T", bound=Model, covariant=True)
 
 
 class UserManager(BaseUserManager[_T]):
+    def get_or_none(self, **kwargs) -> _T:
+        try:
+            return self.get_queryset().get(**kwargs)
+        except self.model.DoesNotExist:
+            return None
+
     def _create_user(self, email: str, password: str, **extra_fields) -> _T:
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
