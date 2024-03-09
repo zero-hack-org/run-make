@@ -32,10 +32,10 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.black]
-line-length = 100
+line-length = 120
 
 [tool.flake8]
-max-line-length = 100
+max-line-length = 120
 exclude = "migrations,__pycache__,manage.py,settings.py,env,.env,.venv,out"
 
 [tool.mypy]
