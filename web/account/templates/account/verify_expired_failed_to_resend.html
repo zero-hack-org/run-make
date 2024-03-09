@@ -5,7 +5,6 @@
 {% endblock %}
 
 {% block content %}
-
 <main class="container px-4	pt-6">
   <div class="content">
     <h1 class="title is-4">
@@ -18,16 +17,25 @@
     <p>お手数ですが以下より登録用メールの再送をお願いいたします</p>
     <p>
       解決しない場合はお手数をおかけしますが問合わせ先(
-        <a class="has-text-link" href="mailto:{{support_email_address}}">
+        <a class="has-text-link" href="mailto:{{support_email_address_link}}" target="_blank">
           {{ support_email_address }}
         </a>
       )までご連絡ください
     </p>
   </div>
 
-  <form>
-    <div class="control">
-      <button class="button is-link ml-auto">登録用メールを再送する</button>
+  <form class="box mt-6" method="POST" action="{% url 'account:verify_email_failed_expired_to_resend' %}">
+    {% csrf_token %}
+    <div class="field">
+      <label class="label">メールアドレス</label>
+      <div class="control">
+        <input name="email" type="email" class="input" placeholder="yuya.morimoto@example.com">
+      </div>
+    </div>
+    <div class="field is-grouped is-grouped-right">
+      <div class="control">
+        <button class="button is-link ml-auto">登録用メールを再送する</button>
+      </div>
     </div>
   </form>
 </main>
