@@ -15,7 +15,7 @@ class SignUpSerializer(serializers.ModelSerializer):
     def validate_password(self, value: str) -> None:
         result = models.User.check_password(value)
         if result is False:
-            raise serializers.ValidationError("test")
+            raise serializers.ValidationError("validation error")
 
     def create(self, validated_data: dict) -> models.User:
         user: models.User = models.User.objects.create_user(**validated_data)

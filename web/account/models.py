@@ -31,12 +31,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     id = models.UUIDField(_("id"), primary_key=True, default=uuid.uuid4)
     email = models.EmailField(_("email"), unique=True, max_length=100)
-    username = models.CharField(
-        _("username"), max_length=30, null=False, blank=False, default=DEFAULT_USERNAME
-    )
-    gender = models.CharField(
-        _("gender"), max_length=1, choices=GENDER_CHOICES, null=True, blank=True, default=None
-    )
+    username = models.CharField(_("username"), max_length=30, null=False, blank=False, default=DEFAULT_USERNAME)
+    gender = models.CharField(_("gender"), max_length=1, choices=GENDER_CHOICES, null=True, blank=True, default=None)
     birthday = models.DateField(_("birthday"), null=True, blank=True, default=None)
     body_weight = models.DecimalField(
         _("body weight (kg)"),

@@ -45,14 +45,19 @@ class EmailService:
     def send_activation(self, target_user: models.User, verify_token: str) -> None:
         subject = f"仮登録完了のお知らせ[{settings.APPLICATION_NAME}]"
         message_template_name = "email/activation_by_email.txt"
-        context = {
-            "verify_url": f"{settings.EMAIL_VERIFY_END_POINT}/{target_user.id}/{verify_token}"
-        }
+        context = {"verify_url": f"{settings.EMAIL_VERIFY_END_POINT}/{target_user.id}/{verify_token}"}
         target_user.send_mail(
             subject=subject,
-            message=render_to_string(
-                template_name=message_template_name, context={**self.common_context, **context}
-            ),
+            message=render_to_string(template_name=message_template_name, context={**self.common_context, **context}),
+        )
+
+    def resend_activation(self, target_user: models.User, verify_token: str) -> None:
+        subject = f"登録完了URLの再送[{settings.APPLICATION_NAME}]"
+        message_template_name = "email/activation_by_email_resend.txt"
+        context = {"verify_url": f"{settings.EMAIL_VERIFY_END_POINT}/{target_user.id}/{verify_token}"}
+        target_user.send_mail(
+            subject=subject,
+            message=render_to_string(template_name=message_template_name, context={**self.common_context, **context}),
         )
 
 
@@ -92,3 +97,7 @@ class VerifyTokenService(PasswordResetTokenGenerator):
             return VerifyTokenCheckResult.get_expired_error()
 
         return VerifyTokenCheckResult.get_success()
+
+
+email = EmailService()
+verify_token = VerifyTokenService()

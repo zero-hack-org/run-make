@@ -28,9 +28,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "id",
-                    models.UUIDField(
-                        default=uuid.uuid4, primary_key=True, serialize=False, verbose_name="id"
-                    ),
+                    models.UUIDField(default=uuid.uuid4, primary_key=True, serialize=False, verbose_name="id"),
                 ),
                 ("email", models.EmailField(max_length=100, unique=True, verbose_name="email")),
                 (
@@ -86,9 +84,7 @@ class Migration(migrations.Migration):
                 ("is_superuser", models.BooleanField(default=False, verbose_name="is superuser")),
                 (
                     "created_at",
-                    models.DateTimeField(
-                        default=django.utils.timezone.now, verbose_name="created at"
-                    ),
+                    models.DateTimeField(default=django.utils.timezone.now, verbose_name="created at"),
                 ),
                 (
                     "groups",

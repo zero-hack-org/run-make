@@ -215,6 +215,8 @@ AUTH_USER_MODEL = "account.User"
 # Unique config
 APPLICATION_NAME = "RunMake(仮)"
 SUPPORT_EMAIL_ADDRESS = env("SUPPORT_EMAIL_ADDRESS")
+SUPPORT_EMAI_DEFAULT_SUBJECT = f"{APPLICATION_NAME}_問合わせ"
+SUPPORT_EMAI_DEFAULT_BODY = "▼問合わせ内容\n\n\n\n▼連絡用メールアドレス\n(別のアドレスを連絡用のメールアドレスとして利用したい場合は記入ください)"
 
 # Custom endpoint
-EMAIL_VERIFY_END_POINT = "http://0.0.0.0:8000/account/verify/email"  # /uuid/token
+EMAIL_VERIFY_END_POINT = "http://0.0.0.0:8000/account/verify_email"  # /uuid/token
