@@ -5,7 +5,7 @@
 | name        | description |
 | ----------- | ----------- |
 | \*id        | type:uuid   |
-| \*email     |             |
+| \*email     | t            |
 | \*password  |             |
 | \*username  |             |
 | \*gender    |             |
